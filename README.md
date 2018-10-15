@@ -9,7 +9,7 @@ https://github.com/BoMarconiHenriksen/impossibleCollegeDataset
 
 * Hvornår på året er der flest observationer?
 * Hvordan ser en ufo ud?
- -Find flere buzzwords som f.eks. form, farve eller andet. Her kan det være en fordel at bruge textBlob. https://textblob.readthedocs.io/en/dev/
+   * Find flere buzzwords som f.eks. form, farve eller andet. Her kan det være en fordel at bruge textBlob. https://textblob.readthedocs.io/en/dev/
 
 * Hvor lang tid kunne de se ufoen(gennemsnit)?
 
