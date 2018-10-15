@@ -1,6 +1,7 @@
 import os
 import urllib.request as req
 import pandas as pd
+from states import states_us, states_ca
 
 DEFAULT_URL = 'https://raw.githubusercontent.com/planetsig/ufo-reports/master/csv-data/ufo-scrubbed-geocoded-time-standardized.csv'
 DEFAULT_PATH = 'ufo.csv'
@@ -49,6 +50,8 @@ def getUfoData(url = DEFAULT_URL):
     return result
 
 df = getUfoData() # Load dataframe
+
+states = dict(states_us, **states_ca)
 
 #Hvilket sted er der flest UFO observationer?
 
