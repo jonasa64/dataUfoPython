@@ -5,11 +5,14 @@ from datahandler import df
 def main():
     analyze.sightings_where(df)
 
-    plotfig, _, _ = analyze.sightings_when(df)
-    plotfig.savefig('plot1.png')
+    plot, _, _ = analyze.sightings_when(df)
+    plot.savefig('plot1.png')
 
     analyze.appearance(df)
     analyze.duration(df)
+
+    plot, _ = analyze.dayofweek(df)
+    plot.savefig('plot2.png')
 
 if __name__ == '__main__':
     main()

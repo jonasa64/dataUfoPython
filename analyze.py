@@ -30,14 +30,12 @@ def sightings_when(df):
     plt.xlabel("Year", fontsize=10)
     plt.ylabel("Sightings", fontsize=10)
 
-    fig = plt.figure()
-
     month_most = next(iter(sightings_by_month.keys()))
     month_most = datetime(1900, month_most, 1).strftime('%B')
 
     print('The most sightings happen during', month_most)
 
-    return fig, sightings_by_month, sightings_by_year
+    return plt, sightings_by_month, sightings_by_year
 
 
 def appearance(df):
@@ -96,3 +94,25 @@ def duration(df):
     print("The average UFO-sighting lasted", delta_string)
 
     return delta_string
+
+def dayoftheweek(df):
+    dow = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday']
+
+    sightings_by_day = df['Datetime'].dt.dayofweek.value_counts().to_dict()
+    sightings_by_day = list(sorted(sightings_by_day, key)
+
+    sbd = [None] * 7
+    for key, item in sightings_by_day.items():
+        sbd[int(key)] = float(item)
+
+    sbd_total = sum(sbd)
+    sbd_prc = [round(((item / sbd_total) * 100), 2) for item in sbd]
+
+    plt.clf()
+    plt.scatter(dow, sbd_prc)
+
+    plt.title('Days of the Week to spot a UFO', fontsize=12)
+    plt.xlabel("Weekday", fontsize=10)
+    plt.ylabel("Percentage of sightings", fontsize=10)
+
+    return plt, sbd
