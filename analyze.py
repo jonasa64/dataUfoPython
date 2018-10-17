@@ -1,6 +1,8 @@
 from datahandler import states
 import matplotlib.pyplot as plt
 from datetime import datetime, timedelta
+from textblob import TextBlob
+from random import choice
 
 def sightings_where(df):
     sightings_by_city = df['City'].value_counts().to_dict()
@@ -37,10 +39,45 @@ def sightings_when(df):
 
     return fig, sightings_by_month, sightings_by_year
 
-#Hvordan ser en ufo ud?
 
-#Find flere buzzwords som f.eks. form, farve eller andet. Her kan det være en fordel at bruge textBlob. https://textblob.readthedocs.io/en/dev/
+def appearance(df):
+    shape_dict = {}
+    color_dict = {}
+    for row in df.itertuples():
+        tempshape = set()
+        tempcolor = set()
+        shape = str(getattr(row, "Shape")).split()
+        for word in shape:
+            tempshape.add(word.lower())
 
+        blob = TextBlob(" ".join(str(getattr(row, "Comments")).split("/")))
+
+        for word in blob.sentences[0].words:
+            wd = str(word.define())
+            if 'shape' in wd:
+                tempshape.add(word.lower())
+            if 'color' in wd:
+                tempcolor.add(word.lower())
+
+        for word in tempshape:
+            if 'shape' not in word:
+                shape_dict.setdefault(word, 0)
+                shape_dict[word] += 1
+
+        for word in tempcolor:
+            if 'color' not in word:
+                color_dict.setdefault(word, 0)
+                color_dict[word] += 1
+
+    shapes = list(sorted(shape_dict, key=shape_dict.__getitem__))
+    colors = list(sorted(color_dict, key=color_dict.__getitem__))
+
+    shapes = shapes[-10:]
+    colors = colors[-10:]
+
+    print("It appears that UFO's often are", choice(shapes), "shaped and appears", choice(colors))
+
+    return shapes, colors
 
 def duration(df):
     duration_delta = str(timedelta(seconds=df['Duration'].mean()))

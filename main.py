@@ -8,6 +8,7 @@ def main():
     plotfig, _, _ = analyze.sightings_when(df)
     plotfig.savefig('plot1.png')
 
+    analyze.appearance(df)
     analyze.duration(df)
 
 if __name__ == '__main__':
