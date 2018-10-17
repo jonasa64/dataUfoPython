@@ -1,5 +1,6 @@
-from datahandler import states
+from datahandler import states, states_us
 import matplotlib.pyplot as plt
+import matplotlib.patches as mpatches
 from datetime import datetime, timedelta
 from textblob import TextBlob
 from random import choice
@@ -95,11 +96,11 @@ def duration(df):
 
     return delta_string
 
+
 def dayoftheweek(df):
     dow = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday']
 
     sightings_by_day = df['Datetime'].dt.dayofweek.value_counts().to_dict()
-    sightings_by_day = list(sorted(sightings_by_day, key)
 
     sbd = [None] * 7
     for key, item in sightings_by_day.items():
@@ -116,3 +117,85 @@ def dayoftheweek(df):
     plt.ylabel("Percentage of sightings", fontsize=10)
 
     return plt, sbd
+
+
+def sentiment_analyzis(df, nm='sub'):
+
+    subjectivity = []
+    polarity = []
+    lby = ''
+
+    for row in df.itertuples():
+        comment = TextBlob(str(getattr(row, "Comments")))
+        p, s = comment.sentiment
+
+
+        if nm == 'pol':
+            lb = 'Polarity Normalized'
+            subjectivity.append(s)
+
+            if p < 0.0:
+                polarity.append(0.0)
+            else:
+                polarity.append(p)
+
+        if nm == 'sub':
+            lb = 'Subjectivity Normalized'
+            polarity.append(p)
+            if s > 0.5:
+                subjectivity.append((s - 0.5) * 2)
+            else:
+                subjectivity.append((s * -2))
+
+    r_patch = mpatches.Patch(color='red', label='Subjectivity')
+    g_patch = mpatches.Patch(color='green', label='Polarity')
+
+    plot1 = plt.figure()
+
+    plt.clf()
+    plt.plot(subjectivity, c='red', linewidth=0.01)
+
+    plt.title("Sentiment Analyzis", fontsize=20)
+    plt.xlabel("Observations", fontsize=12)
+    plt.ylabel(lby, fontsize=12)
+    plt.plot(polarity, c='green', linewidth=0.01)
+
+    plt.tick_params(axis='both', labelsize=10)
+    plt.legend(handles=[g_patch, r_patch], loc='upper right', prop={'size': 10})
+
+    plot2 = plt.figure()
+
+    plt.clf()
+    plt.plot(subjectivity[-100:], c='red', linewidth=0.5, label='Subjectivity')
+
+    plt.title("Sentiment Analyzis", fontsize=20)
+    plt.xlabel("Observations", fontsize=12)
+    plt.ylabel(lby, fontsize=12)
+    plt.plot(polarity[-100:], c='green', linewidth=0.5)
+
+    plt.tick_params(axis='both', labelsize=10)
+    plt.legend(handles=[g_patch, r_patch], loc='upper right', prop={'size': 10})
+
+    return plot1, plot2
+
+def state_map_plot(df):
+    sightings_by_state = df['State'].value_counts().to_dict()
+    blue_offset = 20
+    r = hex(0)
+    g = hex(0)
+    b = hex(blue_offset)
+
+    total_states = len(states_us)
+    color_increment = (int('ff', base=16) - blue_offset) / total_states
+
+    color_count_mapping = []
+
+    i = 0
+    for key, value in sightings_by_state.items():
+        if key.upper() in states_us:
+            i += 1
+            color = '#0000' + b[2:].zfill(2)
+            b = float(blue_offset) + color_increment * float(i)
+            b = hex(int(b))
+
+            color_count_mapping.append((key, states_us[key.upper()], value, color))
