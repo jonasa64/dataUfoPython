@@ -75,7 +75,7 @@ def appearance(df):
     shapes = shapes[-10:]
     colors = colors[-10:]
 
-    print("It appears that UFO's often are", choice(shapes), "shaped and appears", choice(colors))
+    print("It seems that UFO's often appear", choice(shapes), "shaped and", choice(colors))
 
     return shapes, colors
 
@@ -93,6 +93,6 @@ def duration(df):
     if len(duration_delta) != 1:
         delta_string = " ".join(duration_delta[0:2]) + " " + delta_string
 
-    print("An average UFO-sighting lasted", delta_string)
+    print("The average UFO-sighting lasted", delta_string)
 
     return delta_string
