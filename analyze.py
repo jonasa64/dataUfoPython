@@ -1,9 +1,11 @@
 from datahandler import states, states_us
 import matplotlib.pyplot as plt
 import matplotlib.patches as mpatches
+import pandas as pd
 from datetime import datetime, timedelta
 from textblob import TextBlob
 from random import choice
+import folium
 
 def sightings_where(df):
     sightings_by_city = df['City'].value_counts().to_dict()
@@ -12,10 +14,10 @@ def sightings_where(df):
     city_most = next(iter(sightings_by_city.keys()))
     state_most = next(iter(sightings_by_state.keys()))
 
-    print(city_most.title(), 'is the city with the most UFO sightings. (' + str(sightings_by_city[city_most]) + ' sightings)')
-    print(states[state_most.upper()], 'is the state with the most UFO sightings.(' + str(sightings_by_state[state_most]) + ') sightings')
+    city_answer = city_most.title() + ' is the city with the most UFO sightings. (' + str(sightings_by_city[city_most]) + ' sightings)'
+    state_answer = states[state_most.upper()] + ' is the state with the most UFO sightings.(' + str(sightings_by_state[state_most]) + ') sightings'
 
-    return sightings_by_city, sightings_by_state
+    return city_answer, state_answer
 
 
 def sightings_when(df):
@@ -34,9 +36,9 @@ def sightings_when(df):
     month_most = next(iter(sightings_by_month.keys()))
     month_most = datetime(1900, month_most, 1).strftime('%B')
 
-    print('The most sightings happen during', month_most)
+    sightings_answer = 'The most sightings happen during ' + month_most
 
-    return plt, sightings_by_month, sightings_by_year
+    return plt, sightings_answer
 
 
 def appearance(df):
@@ -74,9 +76,9 @@ def appearance(df):
     shapes = shapes[-10:]
     colors = colors[-10:]
 
-    print("It seems that UFO's often appear", choice(shapes), "shaped and", choice(colors))
+    appearance_answer = "It seems that UFO's often appear " + choice(shapes) + " shaped and " + choice(colors)
 
-    return shapes, colors
+    return appearance_answer
 
 def duration(df):
     duration_delta = str(timedelta(seconds=df['Duration'].mean()))
@@ -92,9 +94,9 @@ def duration(df):
     if len(duration_delta) != 1:
         delta_string = " ".join(duration_delta[0:2]) + " " + delta_string
 
-    print("The average UFO-sighting lasted", delta_string)
+    duration_answer = "The average UFO-sighting lasted " + delta_string
 
-    return delta_string
+    return duration_answer
 
 
 def dayoftheweek(df):
@@ -131,7 +133,7 @@ def sentiment_analyzis(df, nm='sub'):
 
 
         if nm == 'pol':
-            lb = 'Polarity Normalized'
+            lby = 'Polarity Normalized'
             subjectivity.append(s)
 
             if p < 0.0:
@@ -140,7 +142,7 @@ def sentiment_analyzis(df, nm='sub'):
                 polarity.append(p)
 
         if nm == 'sub':
-            lb = 'Subjectivity Normalized'
+            lby = 'Subjectivity Normalized'
             polarity.append(p)
             if s > 0.5:
                 subjectivity.append((s - 0.5) * 2)
@@ -168,7 +170,7 @@ def sentiment_analyzis(df, nm='sub'):
     plt.clf()
     plt.plot(subjectivity[-100:], c='red', linewidth=0.5, label='Subjectivity')
 
-    plt.title("Sentiment Analyzis", fontsize=20)
+    plt.title("Sentiment Analyzis(fragment)", fontsize=20)
     plt.xlabel("Observations", fontsize=12)
     plt.ylabel(lby, fontsize=12)
     plt.plot(polarity[-100:], c='green', linewidth=0.5)
@@ -180,22 +182,28 @@ def sentiment_analyzis(df, nm='sub'):
 
 def state_map_plot(df):
     sightings_by_state = df['State'].value_counts().to_dict()
-    blue_offset = 20
-    r = hex(0)
-    g = hex(0)
-    b = hex(blue_offset)
+    state_data = []
 
-    total_states = len(states_us)
-    color_increment = (int('ff', base=16) - blue_offset) / total_states
-
-    color_count_mapping = []
-
-    i = 0
     for key, value in sightings_by_state.items():
         if key.upper() in states_us:
-            i += 1
-            color = '#0000' + b[2:].zfill(2)
-            b = float(blue_offset) + color_increment * float(i)
-            b = hex(int(b))
+            st = key.upper()
+            state_data.append((st, states_us[st], value))
 
-            color_count_mapping.append((key, states_us[key.upper()], value, color))
+    m = folium.Map(location=[37, -102], zoom_start=5)
+    mapframe = pd.DataFrame(state_data, columns=['StateABB', 'State', 'Sightings'])
+
+    m.choropleth(
+        geo_data='us_states.json',
+        name='choropleth',
+        data=mapframe,
+        columns=['StateABB', 'Sightings'],
+        key_on='feature.id',
+        fill_color='YlOrRd',
+        fill_opacity=0.5,
+        line_opacity=0.5,
+        legend_name='UFO Sightings'
+    )
+
+    folium.LayerControl().add_to(m)
+
+    return m.get_root().render()
