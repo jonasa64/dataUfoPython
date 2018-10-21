@@ -26,8 +26,8 @@ The average UFO-sighting lasted 2 hours 30 minutes 17 seconds
 
 # Output
 
-'''
+```
 Generating HTML ...
 HTNL succesfully generated.
 Created new window in existing browser session.
-'''
+```
