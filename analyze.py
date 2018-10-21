@@ -7,19 +7,22 @@ from textblob import TextBlob
 from random import choice
 import folium
 
+# state and city with most UFO's
 def sightings_where(df):
+    #tConvert the DataFrame to a dictionary 
     sightings_by_city = df['City'].value_counts().to_dict()
     sightings_by_state = df['State'].value_counts().to_dict()
 
     city_most = next(iter(sightings_by_city.keys()))
     state_most = next(iter(sightings_by_state.keys()))
-
+     # most city
     city_answer = city_most.title() + ' is the city with the most UFO sightings. (' + str(sightings_by_city[city_most]) + ' sightings)'
+    #most state 
     state_answer = states[state_most.upper()] + ' is the state with the most UFO sightings.(' + str(sightings_by_state[state_most]) + ') sightings'
 
     return city_answer, state_answer
 
-
+# when most UFO are seen
 def sightings_when(df):
     sightings_by_year = df['Datetime'].dt.year.value_counts().to_dict()
     sightings_by_month = df['Datetime'].dt.month.value_counts().to_dict()
@@ -42,8 +45,10 @@ def sightings_when(df):
 
 
 def appearance(df):
+    #Empty dict for shap and color 
     shape_dict = {}
     color_dict = {}
+    #the itertuples Iterate over DataFrame rows as namedtuples, with index value as first element of the tuple
     for row in df.itertuples():
         tempshape = set()
         tempcolor = set()
@@ -69,7 +74,7 @@ def appearance(df):
             if 'color' not in word:
                 color_dict.setdefault(word, 0)
                 color_dict[word] += 1
-
+     #sort the list whit the shape and color 
     shapes = list(sorted(shape_dict, key=shape_dict.__getitem__))
     colors = list(sorted(color_dict, key=color_dict.__getitem__))
 
@@ -81,6 +86,7 @@ def appearance(df):
     return appearance_answer
 
 def duration(df):
+    #mean() function used to calculate mean/average of a given list of numbers
     duration_delta = str(timedelta(seconds=df['Duration'].mean()))
 
     duration_delta = duration_delta.split()
@@ -153,7 +159,7 @@ def sentiment_analyzis(df, nm='sub'):
     g_patch = mpatches.Patch(color='green', label='Polarity')
 
     plot1 = plt.figure()
-
+    # clf() Clear the current figure.
     plt.clf()
     plt.plot(subjectivity, c='red', linewidth=0.01)
 
