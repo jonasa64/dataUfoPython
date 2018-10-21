@@ -1,16 +1,33 @@
 # dataUfoPython
 
-https://github.com/BoMarconiHenriksen/impossibleCollegeDataset
+# Installation/Running
+The program is CLI-based.
+Make sure you have the required dependencies installed
+Download the respository and run main.py from CLI with your Python interpreter, having no arguments.
 
+```
+> python main.py
+```
 
-* Hvilket sted er der flest UFO observationer?
-* Hvordan har antallet af observationer udviklet sig over tid?
-* Som besvarelse til det her spørgsmål vil det give god mening at lave et plot. Det er valgfrit, hvordan i laver plottet.
+# Dependencies
+This program depends on Pandas, random, webbrowser and the urllib libraries, as well as the os library,  
+all of which are part of the Anaconda framework.
 
-* Hvornår på året er der flest observationer?
-* Hvordan ser en ufo ud?
-   * Find flere buzzwords som f.eks. form, farve eller andet. Her kan det være en fordel at bruge textBlob. https://textblob.readthedocs.io/en/dev/
+Additionally PyPlot, folium and TextBlob are needed 
 
-* Hvor lang tid kunne de se ufoen(gennemsnit)?
+# Results
 
-Plus plots herefter
+California is the state with the most UFO sightings
+The most sightings happen during July
+Possible result(random): It seems that UFO's often appear disk shaped and white
+The average UFO-sighting lasted 2 hours 30 minutes 17 seconds
+
++ Plots
+
+# Output
+
+'''
+Generating HTML ...
+HTNL succesfully generated.
+Created new window in existing browser session.
+'''
