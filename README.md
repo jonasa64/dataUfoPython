@@ -17,11 +17,13 @@ Additionally PyPlot, folium and TextBlob are needed
 
 # Results
 
-California is the state with the most UFO sightings
-The most sightings happen during July
-Possible result(random): It seems that UFO's often appear disk shaped and white
-The average UFO-sighting lasted 2 hours 30 minutes 17 seconds
-
+* Hvornår på året er der flest observationer?
+  * Californien har flest UFO-observationer
+* Hvordan ser en ufo ud?
+  * En UFO kan muligvis(rnd-gen) være tallerkenformet og hvid 
+ * Hvor lang tid kunne de se ufoen(gennemsnit)?
+  * En UFO blev i gennemsnit observeret i 2½time og 17 sekunder
+  
 + Plots
 
 # Output
