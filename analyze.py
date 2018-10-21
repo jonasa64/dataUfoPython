@@ -9,10 +9,10 @@ import folium
 
 # state and city with most UFO's
 def sightings_where(df):
-    #tConvert the DataFrame to a dictionary 
+    #Convert the DataFrame to a dictionary 
     sightings_by_city = df['City'].value_counts().to_dict()
     sightings_by_state = df['State'].value_counts().to_dict()
-
+    #Retrieve the next item from the iterator 
     city_most = next(iter(sightings_by_city.keys()))
     state_most = next(iter(sightings_by_state.keys()))
      # most city
@@ -24,6 +24,7 @@ def sightings_where(df):
 
 # when most UFO are seen
 def sightings_when(df):
+       #Convert the DataFrame to a dictionary 
     sightings_by_year = df['Datetime'].dt.year.value_counts().to_dict()
     sightings_by_month = df['Datetime'].dt.month.value_counts().to_dict()
 
@@ -35,7 +36,7 @@ def sightings_when(df):
     plt.title('Distribution of sightings over time', fontsize=12)
     plt.xlabel("Year", fontsize=10)
     plt.ylabel("Sightings", fontsize=10)
-
+      #Retrieve the next item from the iterator 
     month_most = next(iter(sightings_by_month.keys()))
     month_most = datetime(1900, month_most, 1).strftime('%B')
 
@@ -67,6 +68,7 @@ def appearance(df):
 
         for word in tempshape:
             if 'shape' not in word:
+                #setdeault take a key to be searched in the dictionary as first Parameters and default_value there are optional
                 shape_dict.setdefault(word, 0)
                 shape_dict[word] += 1
 
