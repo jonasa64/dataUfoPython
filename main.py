@@ -51,13 +51,11 @@ def main(nz ='sub'):
         plot2.savefig('plot3-2.png')
         html += '<img src="plot3-2.png" alt="Plot3-2"></span> \n'
 
-        html += imgwrap[1]
+        html += imgwrap[1] + wrapper[1]
 
         temp_html = mapgen.state_map_plot(df)
         temp_html = temp_html.split("</head>", maxsplit=1)
         html = temp_html[0] + head + "</head>\n" + html + "\n" + temp_html[1]
-
-        html += wrapper[1]
 
         fp.write(html)
 
