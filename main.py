@@ -60,7 +60,7 @@ def main():
 
         fp.write(html)
 
-        print('HTNL succesfully generated.')
+        print('HTML succesfully generated.')
 
         return True
 
